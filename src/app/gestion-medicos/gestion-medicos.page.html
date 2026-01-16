@@ -1,0 +1,128 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/sistema"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ pageTitle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Loading -->
+  <div class="ion-text-center ion-margin-top" *ngIf="isLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>{{ message || 'Procesando...' }}</p>
+  </div>
+
+  <!-- Formulario: Crear o Editar -->
+  <div *ngIf="!isLoading && (accion === 'crear' || accion === 'editar-form')">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ accion === 'crear' ? 'Registrar Nuevo Médico' : 'Editar Datos del Médico' }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form (ngSubmit)="onSubmitMedico()">
+
+          <ion-item class="ion-margin-bottom">
+            <ion-label position="stacked">Nombres <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input [(ngModel)]="medico.nombres" name="nombres" required type="text"
+              placeholder="Ej: Juan"></ion-input>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom">
+            <ion-label position="stacked">Apellidos <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input [(ngModel)]="medico.apellidos" name="apellidos" required type="text"
+              placeholder="Ej: Pérez"></ion-input>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom">
+            <ion-label position="stacked">Especialidad <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input [(ngModel)]="medico.especialidad" name="especialidad" required type="text"
+              placeholder="Ej: Cardiología"></ion-input>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom">
+            <ion-label position="stacked">Cédula Profesional <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input [(ngModel)]="medico.cedula_profesional" name="cedula" required type="text"
+              placeholder="Ej: 1234567890"></ion-input>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom">
+            <ion-label position="stacked">Teléfono</ion-label>
+            <ion-input [(ngModel)]="medico.telefono" name="telefono" type="tel"
+              placeholder="Ej: 0991234567"></ion-input>
+          </ion-item>
+
+          <ion-item-divider class="ion-margin-top" *ngIf="accion === 'editar-form'">
+            <ion-label>Credenciales de Acceso</ion-label>
+          </ion-item-divider>
+
+          <ion-item class="ion-margin-bottom" *ngIf="accion === 'editar-form'">
+            <ion-label position="stacked">Usuario (Email/User) <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input [(ngModel)]="medico.usuario" name="usuario" required type="text"
+              [disabled]="accion === 'editar-form'"></ion-input>
+            <ion-note slot="helper" *ngIf="accion === 'editar-form'">El usuario no se puede modificar.</ion-note>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom" *ngIf="accion === 'editar-form'">
+            <ion-label position="stacked">Contraseña {{ accion === 'editar-form' ? '(Opcional)' : '*' }}</ion-label>
+            <ion-input [(ngModel)]="medico.clave" name="clave" type="password"
+              placeholder="Ingrese nueva contraseña"></ion-input>
+            <ion-note slot="helper" *ngIf="accion === 'editar-form'">Dejar en blanco para mantener la actual.</ion-note>
+          </ion-item>
+
+          <ion-button expand="block" type="submit" class="ion-margin-top"
+            [disabled]="!medico.nombres || !medico.apellidos || !medico.cedula_profesional || !medico.especialidad">
+            {{ accion === 'crear' ? 'Guardar Médico' : 'Actualizar Médico' }}
+          </ion-button>
+
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Lista: Modificar o Eliminar -->
+  <div *ngIf="!isLoading && (accion === 'modificar' || accion === 'eliminar')">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Médicos Registrados ({{ listaMedicos.length }})</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+        <ion-list *ngIf="listaMedicos.length > 0">
+          <ion-item-sliding *ngFor="let medico of listaMedicos">
+            <ion-item lines="full">
+              <ion-label>
+                <h2>Dr(a). {{ medico.nombres }} {{ medico.apellidos }}</h2>
+                <p><strong>Esp:</strong> {{ medico.especialidad }}</p>
+                <p><ion-text color="medium">{{ medico.usuario }}</ion-text></p>
+              </ion-label>
+
+              <!-- Botones directos si no se quiere deslizar -->
+              <ion-buttons slot="end">
+                <!-- 🚨 NUEVO: Botón para gestionar horarios (Solo en modificar) -->
+                <ion-button *ngIf="accion === 'modificar'" color="tertiary" (click)="onGestionarHorarios(medico)">
+                  <ion-icon name="time-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+
+                <ion-button *ngIf="accion === 'modificar'" color="secondary" (click)="onEdit(medico)">
+                  <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+                <ion-button *ngIf="accion === 'eliminar'" color="danger" (click)="onDelete(medico)">
+                  <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-item>
+          </ion-item-sliding>
+        </ion-list>
+
+        <ion-text color="medium" *ngIf="listaMedicos.length === 0">
+          <p class="ion-text-center ion-padding">No hay médicos registrados en el sistema.</p>
+        </ion-text>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+</ion-content>

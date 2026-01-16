@@ -1,0 +1,123 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mi Perfil de Salud</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()" style="font-weight: bold; --color: #b2ff59;">
+        Salir
+        <ion-icon name="log-out-outline" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Mis Datos</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-label>
+          <h2>{{ paciente.nombres }} {{ paciente.apellidos }}</h2>
+          <p>Cédula: {{ paciente.cedula }}</p>
+          <p>Email: {{ paciente.email }}</p>
+          <p *ngIf="paciente.telefono">Tel: {{ paciente.telefono }}</p>
+          <p *ngIf="paciente.direccion">Dir: {{ paciente.direccion }}</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-button expand="block" fill="outline" class="ion-margin-top" (click)="abrirModificar()">
+        Modificar Datos
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button expand="block" (click)="irAAgendar()">
+          <ion-icon name="calendar" slot="start"></ion-icon> Agendar
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block" color="secondary" (click)="irAConsulta()">
+          <ion-icon name="chatbubble" slot="start"></ion-icon> Consulta Telemedicina
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button expand="block" fill="outline" (click)="irAHistorial()">
+          <ion-icon name="time-outline" slot="start"></ion-icon> Ver Historial Completo
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-list lines="full">
+    <ion-list-header>
+      <ion-label color="primary">Mis Citas Programadas</ion-label>
+    </ion-list-header>
+
+    <ion-card *ngFor="let cita of citas" class="cita-card">
+      <ion-item lines="none">
+        <ion-icon slot="start" [name]="cita.id_estado == 3 ? 'close-circle' : 'medical'"
+          [color]="cita.id_estado == 3 ? 'danger' : 'success'">
+        </ion-icon>
+        <ion-label>
+          <h3 style="font-weight: bold;">Dr. {{ cita.medico_nombres }} {{ cita.medico_apellidos }}</h3>
+          <p>{{ cita.fecha_cita | date:'fullDate':'':'es' }} a las {{ cita.hora_cita }}</p>
+        </ion-label>
+        <ion-badge slot="end" [color]="cita.id_estado == 1 ? 'warning' : (cita.id_estado == 2 ? 'success' : 'danger')">
+          {{ cita.nombre_estado }}
+        </ion-badge>
+      </ion-item>
+
+      <ion-card-content class="ion-no-padding ion-padding-horizontal ion-padding-bottom">
+        <p class="motivo-box">
+          <strong>Mi motivo:</strong> {{ cita.motivo }}
+        </p>
+
+        <div *ngIf="cita.accion_historial" class="historial-container">
+          <div class="historial-header">
+            <ion-icon name="notifications-outline"></ion-icon>
+            <span>Última actualización: {{ cita.accion_historial }}</span>
+          </div>
+          <div class="historial-body">
+            <p><strong>Realizado por:</strong>
+              <span *ngIf="cita.tipo_usuario === 'medico'">Médico (Dr. {{ cita.nombre_autor }})</span>
+              <span *ngIf="cita.tipo_usuario === 'paciente'">Paciente</span>
+            </p>
+            <p><strong>Motivo del cambio:</strong> {{ cita.motivo_historial }}</p>
+            <p class="fecha-log">{{ cita.fecha_log | date:'medium' }}</p>
+          </div>
+        </div>
+
+        <!-- 🚨 NUEVOS BOTONES DE ACCIÓN (Solo para Pendiente(1) o Confirmada(2)) -->
+        <ion-row *ngIf="cita.id_estado == 1 || cita.id_estado == 2" class="ion-margin-top">
+          <ion-col size="6">
+            <ion-button expand="block" size="small" color="warning" (click)="modificarCita(cita)">
+              <ion-icon name="create-outline" slot="start"></ion-icon> Modificar
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button expand="block" size="small" color="danger" (click)="rechazarCita(cita)">
+              <ion-icon name="close-circle-outline" slot="start"></ion-icon> Cancelar
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="citas.length === 0" class="ion-text-center">
+      <ion-card-content>No tienes citas registradas.</ion-card-content>
+    </ion-card>
+  </ion-list>
+  <!-- ASISTENTE VIRTUAL FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="tertiary" routerLink="/chatbot">
+      <ion-icon name="chatbubbles"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

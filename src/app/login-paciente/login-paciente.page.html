@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Acceso de Pacientes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-text-center">
+  <div class="login-container">
+    <!-- CASO 1: YA LOGUEADO (Mostrar opciones de sesión) -->
+    <div *ngIf="isAlreadyLoggedIn">
+      <ion-icon name="checkmark-circle-outline" color="success" style="font-size: 64px;"></ion-icon>
+      <h2>¡Hola, {{ pacienteActivo }}!</h2>
+      <p>Tu sesión está activa.</p>
+
+      <ion-button expand="block" color="primary" class="ion-margin-top" (click)="continuarSesion()">
+        Continuar Sesión
+      </ion-button>
+
+      <ion-button fill="outline" expand="block" color="danger" class="ion-margin-top" (click)="logout()">
+        Cerrar Sesión
+      </ion-button>
+    </div>
+
+    <!-- CASO 2: LOGIN FORMULARIO (Si no hay sesión) -->
+    <div *ngIf="!isAlreadyLoggedIn">
+      <ion-icon name="person-circle-outline" size="large" color="primary"></ion-icon>
+      <h2>Bienvenido de vuelta</h2>
+      <p>Ingresa tus datos para gestionar tu salud.</p>
+
+      <ion-item lines="full" class="ion-margin-bottom">
+        <ion-label position="stacked">Número de Cédula</ion-label>
+        <ion-input type="text" [(ngModel)]="cedula" placeholder="Ej: 1712345678"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full" class="ion-margin-bottom">
+        <ion-label position="stacked">Correo Electrónico</ion-label>
+        <ion-input type="email" [(ngModel)]="correo" placeholder="usuario@ejemplo.com"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" (click)="ingresar()" class="ion-margin-top">
+        <ion-icon name="log-in-outline" slot="start"></ion-icon>
+        INGRESAR AL PERFIL
+      </ion-button>
+
+      <p class="ion-margin-top" (click)="irARegistro()">
+        ¿No tienes cuenta? <span style="color: var(--ion-color-primary); font-weight: bold;">Regístrate aquí</span>
+      </p>
+    </div>
+  </div>
+</ion-content>

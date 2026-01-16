@@ -1,0 +1,169 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/sistema"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ pageTitle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-text [color]="error ? 'danger' : 'medium'" *ngIf="message || isLoading" class="ion-text-center">
+    <p>
+      <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+      {{ message }}
+    </p>
+  </ion-text>
+
+  <!-- SECCIÓN CREAR -->
+  <div *ngIf="accion === 'crear' && !isLoading">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Agendar Nueva Cita</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form (ngSubmit)="onCreateCita()">
+
+          <ion-item class="ion-margin-bottom">
+            <ion-select label="Paciente" label-placement="floating" [(ngModel)]="nuevaCita.id_paciente" name="paciente"
+              required>
+              <ion-select-option *ngFor="let p of listaPacientes" [value]="p.id_paciente">
+                {{ p.nombres }} {{ p.apellidos }} ({{ p.cedula }})
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom">
+            <ion-select label="Médico" label-placement="floating" [(ngModel)]="nuevaCita.id_medico" name="medico"
+              required>
+              <ion-select-option *ngFor="let m of listaMedicos" [value]="m.id_medico">
+                {{ m.nombres }} {{ m.apellidos }} ({{ m.especialidad }})
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom">
+            <ion-label position="stacked">Fecha</ion-label>
+            <ion-input type="date" [(ngModel)]="nuevaCita.fecha_cita" name="fecha" required></ion-input>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom">
+            <ion-label position="stacked">Hora</ion-label>
+            <ion-input type="time" [(ngModel)]="nuevaCita.hora_cita" name="hora" required></ion-input>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom">
+            <ion-label position="stacked">Motivo</ion-label>
+            <ion-textarea [(ngModel)]="nuevaCita.motivo" name="motivo" required
+              placeholder="Descripción breve..."></ion-textarea>
+          </ion-item>
+
+          <ion-button expand="block" type="submit" class="ion-margin-top"
+            [disabled]="!nuevaCita.id_paciente || !nuevaCita.id_medico || !nuevaCita.fecha_cita || !nuevaCita.hora_cita">
+            <ion-spinner *ngIf="isSaving" name="crescent"></ion-spinner>
+            Agendar Cita
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+
+  <!-- SECCIÓN MODIFICAR / ELIMINAR (LISTA) -->
+  <div *ngIf="accion === 'modificar' || accion === 'eliminar'">
+
+    <!-- MODO EDICIÓN (Formulario de Modificación) -->
+    <ion-card color="warning" *ngIf="citaEnEdicion">
+      <ion-card-header>
+        <ion-card-title>Modificar Cita #{{ citaEnEdicion.id_cita }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form (ngSubmit)="onUpdateCita()" #editCitaForm="ngForm">
+
+          <ion-item>
+            <ion-label position="stacked">Nueva Fecha</ion-label>
+            <ion-input type="date" [(ngModel)]="citaEnEdicion.fecha_cita" name="fecha_cita" required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Nueva Hora</ion-label>
+            <ion-input type="time" [(ngModel)]="citaEnEdicion.hora_cita" name="hora_cita" required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Motivo</ion-label>
+            <ion-textarea [(ngModel)]="citaEnEdicion.motivo" name="motivo" rows="2"></ion-textarea>
+          </ion-item>
+
+          <ion-item>
+            <ion-select label="Asignar Médico" label-placement="floating" [(ngModel)]="citaEnEdicion.id_medico"
+              name="id_medico" required>
+              <ion-select-option *ngFor="let m of listaMedicos" [value]="m.id_medico">
+                {{ m.nombres }} {{ m.apellidos }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-select label="Estado de Cita" label-placement="floating" [(ngModel)]="citaEnEdicion.id_estado"
+              name="id_estado" required>
+              <ion-select-option *ngFor="let estado of estadosCita" [value]="estado.id">{{ estado.nombre
+                }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-button expand="block" color="secondary" type="submit" [disabled]="isSaving || !editCitaForm.valid"
+            class="ion-margin-top">
+            <ion-spinner *ngIf="isSaving" name="crescent"></ion-spinner>
+            {{ isSaving ? 'Guardando...' : 'Guardar Cambios' }}
+          </ion-button>
+
+          <ion-button expand="block" fill="outline" color="medium" (click)="citaEnEdicion=null">
+            Cancelar
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- LISTA DE CITAS -->
+    <ion-card *ngIf="!citaEnEdicion && !isLoading">
+      <ion-card-header>
+        <ion-card-title>Citas Registradas ({{ listaCitas.length }})</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+        <ion-list *ngIf="listaCitas.length > 0">
+          <ion-item-sliding *ngFor="let cita of listaCitas">
+
+            <ion-item lines="full">
+              <ion-label>
+                <h2>{{ cita.paciente_nombres }} {{ cita.paciente_apellidos }}</h2>
+                <p>Dr(a): {{ cita.medico_nombres }} {{ cita.medico_apellidos }}</p>
+                <p>Fecha: {{ cita.fecha_cita }} | Hora: {{ cita.hora_cita }}</p>
+                <p>Estado: <ion-text [color]="cita.id_estado == 2 ? 'success' : 'warning'">{{ cita.nombre_estado
+                    }}</ion-text></p>
+              </ion-label>
+
+              <ion-buttons slot="end">
+                <ion-button *ngIf="accion === 'modificar'" color="secondary" (click)="onEdit(cita)">
+                  <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+                </ion-button>
+                <ion-button *ngIf="accion === 'eliminar'" color="danger" (click)="onDelete(cita)">
+                  <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-item>
+
+          </ion-item-sliding>
+        </ion-list>
+
+        <ion-text color="medium" class="ion-text-center" *ngIf="listaCitas.length === 0">
+          <p class="ion-text-center ion-padding">No hay citas registradas.</p>
+        </ion-text>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+</ion-content>

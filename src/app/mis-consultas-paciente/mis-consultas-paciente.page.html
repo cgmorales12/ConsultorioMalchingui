@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mis Consultas Médicas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- SECCIÓN: NUEVA CONSULTA -->
+  <ion-card class="ion-margin-bottom">
+    <ion-card-header>
+      <ion-card-title>Nueva Consulta Médica</ion-card-title>
+      <ion-card-subtitle>Escribe directamente a un especialista</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+
+        <ion-item>
+          <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+          <ion-label position="stacked">Seleccionar Médico</ion-label>
+          <ion-select [(ngModel)]="medicoSeleccionado" placeholder="Elige un doctor">
+            <ion-select-option *ngFor="let m of medicos" [value]="m.id_medico">
+              {{ m.nombres }} {{ m.apellidos }} ({{ m.especialidad }})
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="chatbubble-outline" slot="start" color="primary"></ion-icon>
+          <ion-label position="stacked">Tu Mensaje</ion-label>
+          <ion-textarea [(ngModel)]="nuevoMensaje" placeholder="Describe tus síntomas o duda..."
+            rows="3"></ion-textarea>
+        </ion-item>
+
+      </ion-list>
+
+      <ion-button expand="block" class="ion-margin-top" (click)="enviarConsulta()" [disabled]="isLoading">
+        <ion-icon name="send" slot="start"></ion-icon>
+        Enviar Consulta
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="ion-text-center" *ngIf="isLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Buscando respuestas de tus médicos...</p>
+  </div>
+
+  <div *ngIf="!isLoading && consultas.length === 0" class="ion-text-center ion-padding">
+    <ion-icon name="chatbox-ellipses-outline" size="large" color="medium"></ion-icon>
+    <p>Aún no has realizado consultas médicas o no hay respuestas pendientes.</p>
+  </div>
+
+  <ion-card *ngFor="let c of consultas" [color]="c.estado === 'respondido' ? 'light' : 'white'">
+    <ion-card-header>
+      <ion-item lines="none" class="ion-no-padding">
+        <ion-label>
+          <ion-card-subtitle>Dr(a). {{ c.medico_nombres }} {{ c.medico_apellidos }}</ion-card-subtitle>
+          <ion-card-title style="font-size: 1rem;">Estado:
+            <ion-badge [color]="c.estado === 'pendiente' ? 'warning' : 'success'">
+              {{ c.estado | uppercase }}
+            </ion-badge>
+          </ion-card-title>
+        </ion-label>
+      </ion-item>
+    </ion-card-header>
+
+    <ion-card-content>
+      <div class="mensaje-box user-msg">
+        <strong>Tu consulta:</strong>
+        <p>{{ c.mensaje_paciente }}</p>
+        <small>{{ c.fecha_envio | date:'short' }}</small>
+      </div>
+
+      <div class="mensaje-box doctor-msg" *ngIf="c.respuesta_medico">
+        <hr>
+        <ion-icon name="medical" color="primary"></ion-icon>
+        <strong>Respuesta del Médico:</strong>
+        <p>{{ c.respuesta_medico }}</p>
+        <small>{{ c.fecha_respuesta | date:'short' }}</small>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

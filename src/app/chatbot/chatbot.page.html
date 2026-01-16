@@ -1,0 +1,34 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start"><ion-back-button defaultHref="/home"></ion-back-button></ion-buttons>
+    <ion-title>Asistente Virtual</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" #content>
+  <div class="chat-container">
+    <div *ngFor="let msg of mensajes" [ngClass]="{'msg-user': msg.sender === 'user', 'msg-bot': msg.sender === 'bot'}">
+      <div class="bubble shadow-sm">
+        <div [innerHTML]="msg.text" class="message-text"></div>
+
+        <div *ngIf="msg.mostrarEstrellas" class="rating-box ion-margin-top">
+          <ion-button fill="clear" *ngFor="let s of [1,2,3,4,5]" (click)="calificar(s)">⭐</ion-button>
+        </div>
+
+        <span class="time">{{ msg.date | date:'shortTime' }}</span>
+      </div>
+    </div>
+    <div *ngIf="isTyping" class="msg-bot"><div class="bubble"><ion-spinner name="dots"></ion-spinner></div></div>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-item lines="none">
+      <ion-input placeholder="Escribe aquí..." [(ngModel)]="nuevoMensaje" (keyup.enter)="enviarMensaje()"></ion-input>
+      <ion-button slot="end" fill="clear" (click)="enviarMensaje()" [disabled]="!nuevoMensaje.trim()">
+        <ion-icon name="send"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>

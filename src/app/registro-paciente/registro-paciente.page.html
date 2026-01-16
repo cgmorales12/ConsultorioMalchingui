@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Registro de Nuevo Paciente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">Formulario de Registro</ion-card-title>
+      <ion-card-subtitle class="ion-text-center">Llene todos los datos obligatorios (*)</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+
+        <ion-item>
+          <ion-label position="floating">Cédula / Pasaporte (*)</ion-label>
+          <ion-input type="text" [(ngModel)]="paciente.cedula" name="cedula" required maxlength="20"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Nombres (*)</ion-label>
+          <ion-input type="text" [(ngModel)]="paciente.nombres" name="nombres" required
+            pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Apellidos (*)</ion-label>
+          <ion-input type="text" [(ngModel)]="paciente.apellidos" name="apellidos" required
+            pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Fecha de Nacimiento (*)</ion-label>
+
+          <ion-input type="date" [(ngModel)]="paciente.fecha_nacimiento" name="fecha_nacimiento" required
+            max="{{ getMaxDate() }}">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Teléfono (*)</ion-label>
+          <ion-input type="tel" [(ngModel)]="paciente.telefono" name="telefono" maxlength="20" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Email (*)</ion-label>
+          <ion-input type="email" [(ngModel)]="paciente.email" name="email" required
+            pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Dirección (*)</ion-label>
+          <ion-input type="text" [(ngModel)]="paciente.direccion" name="direccion" required></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" color="success" type="submit" class="ion-margin-top"
+          [disabled]="!registerForm.valid || isLoading">
+          <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+          {{ isLoading ? 'Registrando...' : 'Registrar y Agendar Cita' }}
+        </ion-button>
+      </form>
+
+      <p *ngIf="error" class="ion-text-center ion-padding-top" style="color: red;">
+        {{ error }}
+      </p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

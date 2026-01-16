@@ -1,0 +1,45 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/perfil-paciente"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Historial de Citas</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+    <div class="ion-text-center" *ngIf="isLoading">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Cargando historial...</p>
+    </div>
+
+    <ion-list *ngIf="!isLoading && historial.length > 0">
+        <ion-item *ngFor="let h of historial" detail="false">
+            <ion-label class="ion-text-wrap">
+                <h2>
+                    <ion-badge [color]="getBadgeColor(h.accion)" class="ion-margin-end">{{ h.accion }}</ion-badge>
+                    {{ h.fecha_cita | date:'dd/MM/yyyy' }} - {{ h.hora_cita }}
+                </h2>
+                <p *ngIf="h.medico_nombres"><strong>Dr(a).:</strong> {{ h.medico_nombres }} {{ h.medico_apellidos }}</p>
+                <p><strong>Motivo Cita:</strong> {{ h.motivo_cita }}</p>
+                <p *ngIf="h.motivo_accion"><strong>Nota:</strong> {{ h.motivo_accion }}</p>
+
+                <ion-button *ngIf="h.accion !== 'CANCELADA'" fill="outline" size="small" color="warning"
+                    (click)="calificarAtencion(h)">
+                    <ion-icon name="star" slot="start"></ion-icon>
+                    Calificar
+                </ion-button>
+                <ion-note slot="end" color="medium" style="font-size: small;">{{ h.fecha_registro | date:'medium'
+                    }}</ion-note>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+
+    <div *ngIf="!isLoading && historial.length === 0" class="ion-text-center ion-padding">
+        <ion-icon name="time-outline" style="font-size: 64px; color: #ccc;"></ion-icon>
+        <h3>No hay registros de historial</h3>
+        <p>Aquí verás las citas que has programado, modificado o cancelado.</p>
+    </div>
+
+</ion-content>

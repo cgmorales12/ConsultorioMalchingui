@@ -1,0 +1,194 @@
+<ion-header translucent="true">
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center title-wrap">
+      <div class="subheadline">CONSULTORIO MÉDICO LUZ Y VIDA</div>
+      <div class="location-tag">Malchinguí, Ecuador</div>
+      <div class="headline">Registro de Citas</div>
+      <span class="subtitle prototype">PROTOTIPO</span>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="light" fill="outline" size="small" class="login-btn" (click)="goToLogin()">
+        <ion-icon name="log-in-outline" slot="start"></ion-icon>
+        Ingreso Personal
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding home-bg">
+  <div class="logo-banner">
+    <ion-img src="assets/medical-icon.svg" alt="Logo Consultorio Luz y Vida"></ion-img>
+  </div>
+
+  <div class="hero">
+    <div class="hero-copy">
+      <h1 class="hero-title">Bienvenido Paciente</h1>
+      <p class="lead">Gestione sus citas médicas y consultas virtuales de forma rápida y segura.</p>
+
+      <div class="cta-column">
+        <div class="cta-block">
+          <p class="cta-label">¿ES TU PRIMERA VEZ?</p>
+          <ion-button expand="block" color="light" fill="solid" (click)="goToRegistro()">
+            <ion-icon name="person-add-outline" slot="start"></ion-icon>
+            REGISTRO PACIENTE NUEVO
+          </ion-button>
+        </div>
+
+        <div class="cta-block">
+          <p class="cta-label">¿YA TIENES UNA CUENTA?</p>
+          <ion-button expand="block" color="tertiary" fill="outline" (click)="goToLoginPaciente()">
+            <ion-icon name="log-in-outline" slot="start"></ion-icon>
+            PACIENTE REGISTRADO
+          </ion-button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <ion-grid fixed class="sections-grid">
+    <ion-row>
+      <ion-col size="12" sizeLg="6">
+        <ion-card class="glass list-card themed-card">
+          <ion-card-header>
+            <div class="card-title-row">
+              <ion-card-title>Médicos Disponibles Citas</ion-card-title>
+              <ion-chip color="success" outline>
+                <ion-icon name="medical-outline"></ion-icon>
+                <ion-label>Actualizado</ion-label>
+              </ion-chip>
+            </div>
+            <ion-card-subtitle>Datos reales de nuestra agenda</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list lines="full">
+              <ion-item *ngFor="let medico of medicosDisponibles">
+                <ion-avatar slot="start" class="avatar-icon" [ngClass]="medico.genero === 'M' ? 'male' : 'female'">
+                  <ion-icon [name]="medico.genero === 'M' ? 'male-outline' : 'female-outline'"></ion-icon>
+                </ion-avatar>
+                <ion-label class="ion-text-wrap">
+                  <h3 style="font-weight: bold; color: black; font-size: 1.1em;">
+                    {{ medico.genero === 'M' ? 'Dr. ' : 'Dra. ' }}{{ medico.nombre }}
+                  </h3>
+                  <p>{{ medico.especialidad }}</p>
+                </ion-label>
+                <ion-badge [color]="medico.disponible ? 'success' : 'medium'">
+                  {{ medico.disponible ? 'Disponible' : 'Ocupado' }}
+                </ion-badge>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" sizeLg="6">
+        <ion-card class="glass list-card themed-card">
+          <ion-card-header>
+            <div class="card-title-row">
+              <ion-card-title>Estado de citas</ion-card-title>
+              <ion-chip color="tertiary" outline>
+                <ion-icon name="pulse-outline"></ion-icon>
+                <ion-label>Tiempo real</ion-label>
+              </ion-chip>
+            </div>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list lines="full">
+              <!-- Horarios Ocupados -->
+              <ion-item>
+                <ion-icon slot="start" name="calendar-outline" color="warning" size="large"></ion-icon>
+                <ion-label>
+                  <h3>Horarios Ocupados</h3>
+                  <p>Citas agendadas en sistema</p>
+                </ion-label>
+                <ion-badge color="warning" slot="end">{{ statsCitas.ocupados }}</ion-badge>
+              </ion-item>
+
+              <!-- Horarios Disponibles -->
+              <ion-item>
+                <ion-icon slot="start" name="checkmark-circle-outline" color="success" size="large"></ion-icon>
+                <ion-label>
+                  <h3>Horarios Disponibles</h3>
+                  <p>Espacios libres para agendar</p>
+                </ion-label>
+                <ion-badge color="success" slot="end">{{ statsCitas.disponibles }}</ion-badge>
+              </ion-item>
+
+              <!-- Horarios Liberados -->
+              <ion-item>
+                <ion-icon slot="start" name="refresh-circle-outline" color="secondary" size="large"></ion-icon>
+                <ion-label>
+                  <h3>Horarios Liberados</h3>
+                  <p>Turnos reagendables</p>
+                </ion-label>
+                <ion-badge color="secondary" slot="end">{{ statsCitas.liberados }}</ion-badge>
+              </ion-item>
+
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- SECCIÓN CONTACTOS -->
+  <div class="footer-section">
+    <h2 class="footer-title">CONTACTOS</h2>
+
+    <div class="contact-container">
+      <div class="contact-item">
+        <ion-icon name="location-outline"></ion-icon>
+        <div>
+          <strong>Dirección</strong>
+          <p>Calle Quito Sur casa Don Mateo Navarrete alado lubricadora Tigreton</p>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <ion-icon name="call-outline"></ion-icon>
+        <div>
+          <strong>Teléfonos</strong>
+          <p>
+            <a href="tel:022158033">02 215 8033</a><br>
+            <a href="tel:+593986266458">098 626 6458</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <ion-icon name="logo-whatsapp" style="color: #25D366; background: #dcfce7;"></ion-icon>
+        <div>
+          <strong>WhatsApp</strong>
+          <p><a href="https://wa.me/593986266458" target="_blank">Chat directo</a></p>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <ion-icon name="mail-outline"></ion-icon>
+        <div>
+          <strong>Email</strong>
+          <p><a href="mailto:consultorioluzyvidaec@gmail.com">consultorioluzyvidaec@gmail.com</a></p>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <ion-icon name="map-outline"></ion-icon>
+        <div>
+          <strong>Ubicación</strong>
+          <p><a href="https://maps.app.goo.gl/EbEc8goZPmsr9uEfA" target="_blank">Ver en Google Maps</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-credits">
+      <p>Página creada por: <strong>AMALIA IGUASNIA // LUIS RIBERA // CHRISTIAN MORALES</strong></p>
+    </div>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="goToChatbot()" color="secondary">
+      <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

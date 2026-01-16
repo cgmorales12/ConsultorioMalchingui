@@ -1,0 +1,7 @@
+{
+  "name": "luz-y-vida-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

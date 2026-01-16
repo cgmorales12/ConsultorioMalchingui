@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Ingreso Personal (Médico / Sistema)</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">Iniciar Sesión</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <!-- CASO 1: YA LOGUEADO (Mostrar opciones de sesión) -->
+      <div *ngIf="isAlreadyLoggedIn" class="ion-text-center">
+        <ion-icon name="checkmark-circle-outline" color="success" style="font-size: 64px;"></ion-icon>
+        <h2>¡Hola, {{ usuarioActivo }}!</h2>
+        <p>Tu sesión está activa.</p>
+
+        <ion-button expand="block" color="primary" class="ion-margin-top" (click)="continuarSesion()">
+          Continuar Sesión
+        </ion-button>
+
+        <ion-button fill="outline" expand="block" color="danger" class="ion-margin-top" (click)="logout()">
+          Cerrar Sesión
+        </ion-button>
+
+        <ion-button fill="clear" expand="block" color="medium" class="ion-margin-top" (click)="regresarHome()">
+          Ir al Inicio
+        </ion-button>
+      </div>
+
+      <!-- CASO 2: LOGIN FORMULARIO (Si no hay sesión) -->
+      <div *ngIf="!isAlreadyLoggedIn">
+        <ion-item>
+          <ion-icon name="person-outline" slot="start"></ion-icon>
+          <ion-input label="Usuario" label-placement="floating" type="text" name="usuario"
+            [(ngModel)]="credenciales.usuario" required>
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="ion-margin-top">
+          <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+          <ion-input label="Clave" label-placement="floating" type="password" name="clave"
+            [(ngModel)]="credenciales.clave" required>
+          </ion-input>
+        </ion-item>
+
+        <ion-button expand="block" color="success" (click)="onLogin()" class="ion-margin-top"
+          [disabled]="isLoading || !credenciales.usuario || !credenciales.clave">
+          <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+          {{ isLoading ? 'Verificando...' : 'Ingresar' }}
+        </ion-button>
+
+        <p *ngIf="error" class="ion-text-center ion-padding-top" style="color: red;">
+          {{ error }}
+        </p>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+</ion-content>

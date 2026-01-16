@@ -1,0 +1,141 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/sistema"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ pageTitle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-text [color]="error ? 'danger' : 'medium'" *ngIf="message || isLoading" class="ion-text-center">
+    <p>
+      <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+      {{ message }}
+    </p>
+  </ion-text>
+
+  <!-- SECCIÓN CREAR -->
+  <div *ngIf="accion === 'crear' && !isLoading">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Registrar Nuevo Usuario</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form (ngSubmit)="onCreateSistemaUser()">
+
+          <ion-item class="ion-margin-bottom">
+            <ion-select label="Tipo de Usuario" label-placement="floating" [(ngModel)]="nuevoUsuario.rol" name="rol"
+              required>
+              <ion-select-option value="administrador">Administrador de Sistema</ion-select-option>
+              <ion-select-option value="medico">Médico (Asignar a Doctor)</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom" *ngIf="nuevoUsuario.rol === 'medico'">
+            <ion-select label="Seleccionar Médico" label-placement="floating" [(ngModel)]="nuevoUsuario.id_medico"
+              name="id_medico" required>
+              <ion-select-option *ngFor="let m of listaMedicos" [value]="m.id_medico">
+                {{ m.nombres }} {{ m.apellidos }} ({{ m.cedula_profesional }})
+                <span *ngIf="m.usuario"> - [Tiene Usuario]</span>
+              </ion-select-option>
+            </ion-select>
+            <ion-note slot="helper" color="warning" *ngIf="nuevoUsuario.rol === 'medico'">
+              Asignará credenciales a este médico.
+            </ion-note>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom">
+            <ion-label position="stacked">Nombre de Usuario <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input type="text" [(ngModel)]="nuevoUsuario.usuario" name="usuario" required
+              placeholder="Ej: admin2"></ion-input>
+          </ion-item>
+
+          <ion-item class="ion-margin-bottom">
+            <ion-label position="stacked">Contraseña <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input type="password" [(ngModel)]="nuevoUsuario.clave" name="clave" required
+              placeholder="********"></ion-input>
+          </ion-item>
+
+          <ion-button expand="block" type="submit" class="ion-margin-top"
+            [disabled]="!nuevoUsuario.usuario || !nuevoUsuario.clave || (nuevoUsuario.rol === 'medico' && !nuevoUsuario.id_medico)">
+            <ion-spinner *ngIf="isSaving" name="crescent"></ion-spinner>
+            Crear Usuario
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- SECCIÓN MODIFICAR / ELIMINAR (LISTA) -->
+  <div *ngIf="accion === 'modificar' || accion === 'eliminar'">
+
+    <!-- MODO EDICIÓN OVERLAY -->
+    <ion-card color="warning" *ngIf="usuarioEnEdicion">
+      <ion-card-header>
+        <ion-card-title>Editar Usuario: {{ usuarioEnEdicion.usuario }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form (ngSubmit)="onUpdateUsuario()" #editUserForm="ngForm">
+          <ion-item>
+            <ion-label position="stacked">Nuevo Usuario</ion-label>
+            <ion-input type="text" [(ngModel)]="usuarioEnEdicion.usuario" name="usuario" required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Nueva Contraseña (Opcional)</ion-label>
+            <ion-input type="password" [(ngModel)]="usuarioEnEdicion.clave" name="clave"
+              placeholder="Dejar en blanco para mantener"></ion-input>
+          </ion-item>
+
+          <ion-button expand="block" color="secondary" type="submit" class="ion-margin-top"
+            [disabled]="isSaving || !editUserForm.valid">
+            <ion-spinner *ngIf="isSaving" name="crescent"></ion-spinner>
+            {{ isSaving ? 'Guardando...' : 'Actualizar Usuario' }}
+          </ion-button>
+
+          <ion-button expand="block" fill="outline" color="dark" (click)="usuarioEnEdicion=null">
+            Cancelar
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- LISTA DE USUARIOS -->
+    <ion-card *ngIf="!usuarioEnEdicion && !isLoading">
+      <ion-card-header>
+        <ion-card-title>Usuarios Registrados ({{ listaUsuarios.length }})</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+        <ion-list *ngIf="listaUsuarios.length > 0">
+          <ion-item-sliding *ngFor="let u of listaUsuarios">
+            <ion-item lines="full">
+              <ion-label>
+                <h2>{{ u.usuario }}</h2>
+                <p>Rol: <strong>{{ u.nombre_rol }}</strong></p>
+                <p><ion-text color="medium" style="font-size: 0.8em;">ID: {{ u.id_usuario }}</ion-text></p>
+              </ion-label>
+
+              <ion-buttons slot="end">
+                <ion-button *ngIf="accion === 'modificar'" color="secondary" (click)="onEdit(u)">
+                  <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+                </ion-button>
+                <ion-button *ngIf="accion === 'eliminar'" color="danger" (click)="onDelete(u)">
+                  <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-item>
+          </ion-item-sliding>
+        </ion-list>
+
+        <ion-text color="medium" class="ion-text-center" *ngIf="listaUsuarios.length === 0">
+          <p class="ion-text-center ion-padding">No hay usuarios registrados.</p>
+        </ion-text>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+</ion-content>

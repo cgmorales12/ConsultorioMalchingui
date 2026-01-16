@@ -1,0 +1,123 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/medicos"></ion-back-button>
+        </ion-buttons>
+        <ion-title>{{ title }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+    <div class="ion-text-center" *ngIf="isLoading">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Cargando citas...</p>
+    </div>
+
+    <div *ngIf="gestionMode === 'aprobacion' && !isLoading">
+        <ion-item class="ion-margin-bottom">
+            <ion-label position="floating">Filtrar por Paciente</ion-label>
+            <ion-select [(ngModel)]="pacienteSeleccionado" placeholder="Seleccione un paciente" interface="popover">
+                <ion-select-option [value]="null">Todos</ion-select-option>
+                <ion-select-option *ngFor="let p of pacientesPendientes" [value]="p.id">
+                    {{ p.nombre }}
+                </ion-select-option>
+            </ion-select>
+        </ion-item>
+
+        <div class="ion-text-center ion-padding" *ngIf="!pacienteSeleccionado">
+            <p class="ion-text-muted">Seleccione un paciente arriba para ver sus citas pendientes.</p>
+        </div>
+    </div>
+
+    <ion-list *ngIf="!isLoading && (gestionMode !== 'aprobacion' || pacienteSeleccionado)">
+        <ng-container *ngFor="let cita of citas">
+            <!-- Show if not approval mode OR (approval mode AND matches selection) -->
+            <!-- Note: pacienteSeleccionado might be cedula (string) or id (number), mismatch check with == -->
+            <ion-item
+                *ngIf="gestionMode !== 'aprobacion' || (cita.id_paciente || cita.paciente_cedula) == pacienteSeleccionado">
+                <ion-label>
+                    <h2>Paciente: {{ cita.paciente_nombres }} {{ cita.paciente_apellidos }}</h2>
+                    <p>Fecha: {{ cita.fecha_cita }} - Hora: {{ cita.hora_cita }}</p>
+                    <p>Motivo: {{ cita.motivo }}</p>
+                    <ion-note slot="end" [color]="cita.id_estado == 1 ? 'warning' : 'success'">
+                        {{ cita.id_estado == 1 ? 'Pendiente' : 'Aprobada' }}
+                    </ion-note>
+                </ion-label>
+
+                <ion-button slot="end"
+                    [color]="gestionMode === 'eliminacion' ? 'danger' : (gestionMode === 'aprobacion' ? 'success' : 'primary')"
+                    (click)="confirmarAccion(cita)">
+                    <ion-icon
+                        [name]="gestionMode === 'eliminacion' ? 'trash-outline' : (gestionMode === 'aprobacion' ? 'checkmark-circle-outline' : 'create-outline')"></ion-icon>
+                </ion-button>
+            </ion-item>
+        </ng-container>
+    </ion-list>
+
+    <div class="ion-text-center ion-padding" *ngIf="!isLoading && citas.length === 0">
+        <p *ngIf="gestionMode === 'aprobacion'">No hay citas pendientes de aprobación.</p>
+        <p *ngIf="gestionMode !== 'aprobacion'">No hay citas registradas.</p>
+    </div>
+
+    <!-- Edit Modal -->
+    <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeEditModal()">
+        <ng-template>
+            <ion-header>
+                <ion-toolbar>
+                    <ion-title>Modificar Cita</ion-title>
+                    <ion-buttons slot="end">
+                        <ion-button (click)="closeEditModal()">Cerrar</ion-button>
+                    </ion-buttons>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content class="ion-padding">
+                <ion-item>
+                    <ion-label position="stacked">Paciente</ion-label>
+                    <ion-input [value]="editCita.paciente_nombres + ' ' + editCita.paciente_apellidos"
+                        readonly></ion-input>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label position="stacked">Fecha</ion-label>
+                    <ion-select [(ngModel)]="editCita.fecha_cita" (ionChange)="onFechaChange()"
+                        placeholder="Seleccione Fecha">
+                        <ion-select-option *ngFor="let fecha of fechasDisponibles" [value]="fecha">
+                            {{ fecha }}
+                        </ion-select-option>
+                    </ion-select>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label position="stacked">Hora</ion-label>
+                    <ion-select [(ngModel)]="editCita.hora_cita" placeholder="Seleccione Hora"
+                        [disabled]="!editCita.fecha_cita">
+                        <!-- If the current time is not in the list (because it's taken by this appointment), show it anyway as an option -->
+                        <ion-select-option *ngIf="editCita.hora_cita" [value]="editCita.hora_cita">
+                            {{ editCita.hora_cita }} (Actual)
+                        </ion-select-option>
+                        <ion-select-option *ngFor="let hora of horasDisponibles" [value]="hora.hora_inicio">
+                            {{ hora.hora_inicio }} - {{ hora.hora_fin }}
+                        </ion-select-option>
+                    </ion-select>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label position="stacked">Motivo Original</ion-label>
+                    <ion-textarea [value]="editCita.motivo" readonly></ion-textarea>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label position="stacked">¿Por qué se cambia la cita?</ion-label>
+                    <ion-textarea [(ngModel)]="motivoCambio"
+                        placeholder="Indique la razón del cambio..."></ion-textarea>
+                </ion-item>
+
+                <div class="ion-padding">
+                    <ion-button expand="block" (click)="saveModification()">Guardar Cambios</ion-button>
+                </div>
+            </ion-content>
+        </ng-template>
+    </ion-modal>
+
+</ion-content>

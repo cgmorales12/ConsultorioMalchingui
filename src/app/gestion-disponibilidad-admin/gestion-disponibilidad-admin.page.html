@@ -1,0 +1,143 @@
+<ion-header>
+    <ion-toolbar color="dark">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/sistema"></ion-back-button>
+        </ion-buttons>
+        <ion-title>{{ pageTitle }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+    <ion-text [color]="error ? 'danger' : 'medium'" *ngIf="message || isLoading" class="ion-text-center">
+        <p>
+            <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+            {{ message }}
+        </p>
+    </ion-text>
+
+    <!-- CREAR -->
+    <div *ngIf="accion === 'crear' && !isLoading">
+        <ion-card>
+            <ion-card-header>
+                <ion-card-title>Nuevo Bloque de Horario</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <form (ngSubmit)="onCreate()">
+                    <ion-item class="ion-margin-bottom">
+                        <ion-select label="Médico" label-placement="floating"
+                            [(ngModel)]="nuevaDisponibilidad.id_medico" name="id_medico" required>
+                            <ion-select-option *ngFor="let m of listaMedicos" [value]="m.id_medico">
+                                {{ m.nombres }} {{ m.apellidos }} ({{ m.especialidad }})
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+
+                    <ion-item class="ion-margin-bottom">
+                        <ion-label position="stacked">Día</ion-label>
+                        <ion-input type="date" [(ngModel)]="nuevaDisponibilidad.fecha_dia" name="fecha_dia"
+                            [min]="minDate" required></ion-input>
+                    </ion-item>
+
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item>
+                                    <ion-label position="stacked">Inicio</ion-label>
+                                    <ion-input type="time" [(ngModel)]="nuevaDisponibilidad.hora_inicio"
+                                        name="hora_inicio" required></ion-input>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col>
+                                <ion-item>
+                                    <ion-label position="stacked">Fin</ion-label>
+                                    <ion-input type="time" [(ngModel)]="nuevaDisponibilidad.hora_fin" name="hora_fin"
+                                        required></ion-input>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+
+                    <ion-button expand="block" type="submit" class="ion-margin-top"
+                        [disabled]="!nuevaDisponibilidad.id_medico || !nuevaDisponibilidad.fecha_dia || !nuevaDisponibilidad.hora_inicio || !nuevaDisponibilidad.hora_fin">
+                        <ion-spinner *ngIf="isSaving" name="crescent"></ion-spinner>
+                        Guardar
+                    </ion-button>
+                </form>
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+    <!-- MODIFICAR / ELIMINAR -->
+    <div *ngIf="accion === 'modificar' || accion === 'eliminar'">
+
+        <!-- Editor Overlay -->
+        <ion-card color="warning" *ngIf="dispEnEdicion">
+            <ion-card-header>
+                <ion-card-title>Editar Horario #{{ dispEnEdicion.id_disponibilidad }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <form (ngSubmit)="onUpdate()">
+                    <ion-item>
+                        <ion-label position="stacked">Día</ion-label>
+                        <ion-input type="date" [(ngModel)]="dispEnEdicion.fecha_dia" name="ed_fecha"
+                            required></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="stacked">Inicio</ion-label>
+                        <ion-input type="time" [(ngModel)]="dispEnEdicion.hora_inicio" name="ed_inicio"
+                            required></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="stacked">Fin</ion-label>
+                        <ion-input type="time" [(ngModel)]="dispEnEdicion.hora_fin" name="ed_fin" required></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-select label="Médico" [(ngModel)]="dispEnEdicion.id_medico" name="ed_medico" required>
+                            <ion-select-option *ngFor="let m of listaMedicos" [value]="m.id_medico">
+                                {{ m.nombres }} {{ m.apellidos }}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+
+                    <ion-button expand="block" color="secondary" type="submit" class="ion-margin-top"
+                        [disabled]="isSaving">
+                        Guardar Cambios
+                    </ion-button>
+                    <ion-button expand="block" fill="outline" color="dark" (click)="dispEnEdicion=null">
+                        Cancelar
+                    </ion-button>
+                </form>
+            </ion-card-content>
+        </ion-card>
+
+        <!-- Lista -->
+        <ion-card *ngIf="!dispEnEdicion && !isLoading">
+            <ion-card-header><ion-card-title>Horarios Registrados ({{ listaDisponibilidad.length
+                    }})</ion-card-title></ion-card-header>
+            <ion-card-content>
+                <ion-list *ngIf="listaDisponibilidad.length > 0">
+                    <ion-item-sliding *ngFor="let disp of listaDisponibilidad">
+                        <ion-item lines="full">
+                            <ion-label>
+                                <h2>Dr. {{ disp.medico_nombres }} {{ disp.medico_apellidos }}</h2>
+                                <p>{{ disp.fecha_dia }} | <strong>{{ disp.hora_inicio }} - {{ disp.hora_fin }}</strong>
+                                </p>
+                            </ion-label>
+                            <ion-buttons slot="end">
+                                <ion-button *ngIf="accion === 'modificar'" color="secondary" (click)="onEdit(disp)">
+                                    <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+                                </ion-button>
+                                <ion-button *ngIf="accion === 'eliminar'" color="danger" (click)="onDelete(disp)">
+                                    <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                                </ion-button>
+                            </ion-buttons>
+                        </ion-item>
+                    </ion-item-sliding>
+                </ion-list>
+            </ion-card-content>
+        </ion-card>
+
+    </div>
+
+</ion-content>

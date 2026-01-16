@@ -1,0 +1,11 @@
+{
+  "/php-api": {
+    "target": "http://localhost/consultorio",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "info",
+    "pathRewrite": {
+      "^/php-api": ""
+    }
+  }
+}

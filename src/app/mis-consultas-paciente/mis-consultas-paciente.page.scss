@@ -1,0 +1,25 @@
+.mensaje-box {
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 5px;
+    
+    p {
+        margin: 5px 0;
+        color: var(--ion-color-dark);
+    }
+    
+    small {
+        font-size: 0.75rem;
+        opacity: 0.7;
+    }
+}
+
+.doctor-msg {
+    background-color: #f0f7ff;
+    border-left: 4px solid var(--ion-color-primary);
+    margin-top: 15px;
+}
+
+ion-badge {
+    margin-left: 5px;
+}

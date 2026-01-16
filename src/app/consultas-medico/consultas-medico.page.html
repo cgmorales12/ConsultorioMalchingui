@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/medicos"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Consultas de Telemedicina</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item-sliding *ngFor="let m of mensajes">
+      <ion-item>
+        <ion-label>
+          <h2>Paciente: {{ m.paciente_nombres }}</h2>
+          <p><strong>Consulta:</strong> {{ m.mensaje_paciente }}</p>
+          <p *ngIf="m.respuesta_medico"><strong>Tu respuesta:</strong> {{ m.respuesta_medico }}</p>
+          <ion-note color="medium">{{ m.fecha_envio | date:'short' }}</ion-note>
+        </ion-label>
+        <ion-badge slot="end" [color]="m.estado === 'pendiente' ? 'warning' : 'success'">
+          {{ m.estado }}
+        </ion-badge>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="secondary" (click)="responderConsulta(m.id_mensaje)" *ngIf="m.estado === 'pendiente'">
+          <ion-icon slot="start" name="chatbubble-ellipses"></ion-icon>
+          Responder
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <div *ngIf="mensajes.length === 0" class="ion-text-center">
+    <p>No tienes consultas pendientes por el momento.</p>
+  </div>
+</ion-content>

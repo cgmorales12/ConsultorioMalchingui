@@ -1,0 +1,70 @@
+<ion-header>
+    <ion-toolbar color="secondary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/medicos"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Crear Cita</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+    <ion-list>
+        <ion-item>
+            <ion-label position="stacked">Paciente</ion-label>
+            <ion-select [(ngModel)]="cita.id_paciente" placeholder="Seleccione un paciente">
+                <ion-select-option *ngFor="let p of pacientes" [value]="p.id_paciente">
+                    {{ p.nombres }} {{ p.apellidos }} ({{ p.cedula }})
+                </ion-select-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="stacked">Médico</ion-label>
+            <ion-select [(ngModel)]="cita.id_medico" placeholder="Seleccione un médico" (ionChange)="onMedicoChange()">
+                <ion-select-option *ngFor="let m of medicos" [value]="m.id_medico">
+                    {{ m.nombres }} {{ m.apellidos }} ({{ m.especialidad }})
+                </ion-select-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="stacked">Fecha Disponible</ion-label>
+            <ion-select [(ngModel)]="cita.fecha_cita" placeholder="Seleccione una fecha" (ionChange)="onFechaChange()"
+                [disabled]="fechasDisponibles.length === 0">
+                <ion-select-option *ngFor="let fecha of fechasDisponibles" [value]="fecha">
+                    {{ fecha | date:'fullDate' }} <!-- Formatting for nicer display if locale allows, or just string -->
+                </ion-select-option>
+            </ion-select>
+            <ion-note slot="error" *ngIf="cita.id_medico && fechasDisponibles.length === 0">
+                El médico no tiene días configurados.
+            </ion-note>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="stacked">Hora</ion-label>
+            <ion-select [(ngModel)]="cita.hora_cita" placeholder="Seleccione una hora"
+                [disabled]="horasDisponibles.length === 0">
+                <ion-select-option *ngFor="let hora of horasDisponibles" [value]="hora.hora_inicio">
+                    {{ hora.hora_inicio }} - {{ hora.hora_fin }}
+                </ion-select-option>
+            </ion-select>
+            <ion-note slot="error" *ngIf="horasDisponibles.length === 0 && cita.fecha_cita">
+                No hay disponibilidad.
+            </ion-note>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="stacked">Motivo de la consulta</ion-label>
+            <ion-textarea [(ngModel)]="cita.motivo" placeholder="Describa el motivo..."></ion-textarea>
+        </ion-item>
+    </ion-list>
+
+    <div class="ion-padding">
+        <ion-button expand="block" color="secondary" (click)="crearCita()">
+            <ion-icon name="save-outline" slot="start"></ion-icon>
+            Guardar Cita
+        </ion-button>
+    </div>
+
+</ion-content>

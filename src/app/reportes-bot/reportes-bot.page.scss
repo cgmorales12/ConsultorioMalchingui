@@ -1,0 +1,29 @@
+.promedio-texto {
+    font-size: 4.5rem;
+    font-weight: 800;
+    margin: 5px 0;
+    color: var(--ion-color-dark);
+}
+
+.stars-display {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    
+    ion-icon {
+        margin: 0 2px;
+    }
+}
+
+ion-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+ion-badge {
+    font-size: 1rem;
+    border-radius: 8px;
+}
+
+.welcome-card {
+    background: linear-gradient(to bottom, #ffffff, #f9f9f9);
+}

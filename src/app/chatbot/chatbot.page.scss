@@ -1,0 +1,87 @@
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .bubble {
+    padding: 10px 16px;
+    /* Más padding horizontal */
+    border-radius: 18px;
+    max-width: 75%;
+    /* Updated as per instruction */
+    font-size: 15px;
+    /* Un poco más grande para leer mejor */
+    position: relative;
+    width: fit-content;
+    /* Se ajusta al texto */
+    /* Removed: display: inline-block; */
+    /* Removed: width: auto; */
+    /* Removed: min-width: 2.5rem; */
+
+    .message-text {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      /* Estándar */
+      word-break: break-word;
+      /* Romper solo si es necesario (palabras laaaargas) */
+      line-height: 1.4;
+      /* Removed: word-break: normal; */
+      /* Removed: overflow-wrap: break-word; */
+
+      a {
+        font-weight: bold;
+        color: inherit;
+        text-decoration: underline;
+      }
+    }
+
+    .time {
+      display: block;
+      font-size: 11px;
+      opacity: 0.8;
+      text-align: right;
+      margin-top: 5px;
+      margin-bottom: -2px;
+    }
+  }
+
+  .msg-user {
+    display: flex;
+    justify-content: flex-end;
+    /* Alineación derecha robusta */
+    padding-left: 20%;
+    /* Espacio para que no ocupe todo */
+
+    .bubble {
+      background: var(--ion-color-primary);
+      color: white;
+      border-bottom-right-radius: 2px;
+    }
+  }
+
+  .msg-bot {
+    display: flex;
+    justify-content: flex-start;
+    /* Alineación izquierda robusta */
+    padding-right: 20%;
+
+    .bubble {
+      background: #f0f0f2;
+      color: black;
+      border-bottom-left-radius: 2px;
+    }
+  }
+
+  .rating-box {
+    display: flex;
+    justify-content: center;
+    background: #fff;
+    border-radius: 10px;
+
+    ion-button {
+      font-size: 1.2rem;
+      --padding-start: 2px;
+      --padding-end: 2px;
+    }
+  }
+}

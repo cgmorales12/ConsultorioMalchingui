@@ -1,0 +1,39 @@
+.scroll-x {
+  display: flex !important;
+  flex-direction: row !important;
+  overflow-x: auto !important;
+  gap: 12px;
+  padding: 10px 5px;
+  -webkit-overflow-scrolling: touch;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.fecha-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+  height: 85px;
+  background: #f4f5f8;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  flex-shrink: 0; // Evita que se aplasten las tarjetas
+
+  .dia-nombre { font-size: 0.75rem; text-transform: uppercase; color: #666; }
+  .dia-numero { font-size: 1.2rem; font-weight: bold; color: #000; }
+  .mes-nombre { font-size: 0.7rem; color: #888; }
+
+  &.seleccionada {
+    background: var(--ion-color-success, #2dd36f) !important;
+    color: white !important;
+    border-color: var(--ion-color-success);
+    
+    .dia-nombre, .dia-numero, .mes-nombre {
+      color: white !important;
+    }
+  }
+}
