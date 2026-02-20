@@ -1,8 +1,8 @@
 <ion-header>
-  <ion-toolbar color="success">
+  <ion-toolbar color="primary">
     <ion-title>Panel Médico</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logout()" style="font-weight: bold; --color: #b71c1c;">
+      <ion-button (click)="logout()" color="light">
         <ion-icon name="log-out-outline" slot="start"></ion-icon>
         Salir
       </ion-button>
@@ -20,9 +20,9 @@
   <div *ngIf="!isLoading">
 
     <!-- DASHBOARD CALIDAD -->
-    <ion-card color="tertiary" class="ion-text-center">
+    <ion-card color="primary" class="ion-text-center">
       <ion-card-header>
-        <ion-card-subtitle>Calidad de Atención</ion-card-subtitle>
+        <ion-card-subtitle style="color: #ffffff;">Calidad de Atención</ion-card-subtitle>
         <ion-card-title>
           <ion-icon name="star" color="warning"></ion-icon> {{ stats.promedio }}
         </ion-card-title>
@@ -37,84 +37,112 @@
       <h3 class="ion-padding-start">Alertas</h3>
 
       <!-- Alerta Citas Pendientes -->
-      <ion-card color="warning" *ngIf="citasPorAprobar.length > 0">
+      <ion-card color="primary" *ngIf="citasPorAprobar.length > 0">
         <ion-card-content class="ion-text-center">
-          <ion-icon name="alert-circle-outline" slot="start" size="large"></ion-icon>
+          <ion-icon name="alert-circle-outline" slot="start" size="large" color="warning"></ion-icon>
           <p><strong>Atención:</strong> Tiene <strong>{{ citasPorAprobar.length }}</strong> citas pendientes de
             confirmación.</p>
-          <ion-button fill="outline" color="dark" size="small" (click)="goToAprobarCita()" class="ion-margin-top">
+          <ion-button expand="block" color="secondary" size="small" (click)="goToAprobarCita()" class="ion-margin-top">
             Ir a Confirmar
           </ion-button>
         </ion-card-content>
       </ion-card>
 
       <!-- Alerta Consultas Pendientes -->
-      <ion-card color="warning" *ngIf="pendingConsultationsCount > 0">
+      <ion-card color="primary" *ngIf="pendingConsultationsCount > 0">
         <ion-card-content class="ion-text-center">
-          <ion-icon name="chatbox-ellipses-outline" slot="start" size="large"></ion-icon>
+          <ion-icon name="chatbox-ellipses-outline" slot="start" size="large" color="warning"></ion-icon>
           <p><strong>Atención:</strong> Tiene <strong>{{ pendingConsultationsCount }}</strong> consultas por responder.
           </p>
-          <ion-button fill="outline" color="dark" size="small" (click)="goToConsultas()" class="ion-margin-top">
+          <ion-button expand="block" color="secondary" size="small" (click)="goToConsultas()" class="ion-margin-top">
             Ir a Responder
           </ion-button>
         </ion-card-content>
       </ion-card>
     </div>
 
-    <h3 class="ion-padding-start">Gestión de Citas</h3>
-    <ion-grid>
-      <ion-row>
-        <ion-col size="12">
-          <ion-button expand="block" color="secondary" (click)="goToCrearCita()">Crear Cita</ion-button>
-        </ion-col>
-        <ion-col size="12">
-          <ion-button expand="block" color="tertiary" (click)="goToAprobarCita()">Confirmar Cita</ion-button>
-        </ion-col>
-        <ion-col size="12">
-          <ion-button expand="block" color="warning" (click)="goToModificarCita()">Modificar Cita</ion-button>
-        </ion-col>
-        <ion-col size="12">
-          <ion-button expand="block" color="danger" (click)="goToEliminarCita()">Rechazar Cita</ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
-    <h3 class="ion-padding-start ion-margin-top">Gestión Telemedicina</h3>
-    <ion-card color="secondary" class="ion-margin-bottom">
+    <ion-card color="primary" class="ion-margin-bottom">
       <ion-card-header>
-        <ion-card-title>Telemedicina</ion-card-title>
+        <ion-card-title>Gestión de Citas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12" size-md="6">
+              <ion-button expand="block" color="secondary" (click)="goToCrearCita()">
+                <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+                Crear Cita
+              </ion-button>
+            </ion-col>
+            <ion-col size="12" size-md="6">
+              <ion-button expand="block" color="secondary" (click)="goToAprobarCita()">
+                <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+                Confirmar Cita
+              </ion-button>
+            </ion-col>
+            <ion-col size="12" size-md="6">
+              <ion-button expand="block" color="secondary" (click)="goToModificarCita()">
+                <ion-icon name="create-outline" slot="start"></ion-icon>
+                Modificar Cita
+              </ion-button>
+            </ion-col>
+            <ion-col size="12" size-md="6">
+              <ion-button expand="block" color="secondary" (click)="goToEliminarCita()">
+                <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+                Rechazar Cita
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card color="primary" class="ion-margin-bottom">
+      <ion-card-header>
+        <ion-card-title>Consulta Rápida</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <p>Revise y responda las consultas directas de sus pacientes.</p>
-        <ion-button expand="block" color="light" (click)="goToConsultas()">
+        <ion-button expand="block" color="secondary" (click)="goToConsultas()">
           <ion-icon name="mail-unread-outline" slot="start"></ion-icon>
           Ver Consultas Pendientes
         </ion-button>
       </ion-card-content>
     </ion-card>
 
-    <h3 class="ion-padding-start ion-margin-top">Gestión Disponibilidad</h3>
-    <ion-button expand="block" fill="outline" color="dark" class="ion-margin" (click)="goToGestionDisponibilidad()">
-      <ion-icon name="time-outline" slot="start"></ion-icon>
-      Gestión de Disponibilidad
-    </ion-button>
+    <ion-card color="primary" class="ion-margin-bottom">
+      <ion-card-header>
+        <ion-card-title>Gestión Disponibilidad</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-button expand="block" color="secondary" (click)="goToGestionDisponibilidad()">
+          <ion-icon name="time-outline" slot="start"></ion-icon>
+          Gestión de Disponibilidad
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
 
-    <h3 class="ion-padding-start ion-margin-top">Citas Agendadas</h3>
+    <ion-card color="primary" class="ion-margin-bottom">
+      <ion-card-header>
+        <ion-card-title>Citas Agendadas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="full" *ngIf="citasAgendadas.length > 0">
+          <ion-item *ngFor="let cita of citasAgendadas">
+            <ion-label>
+              <h2>{{ cita.paciente_nombres }} {{ cita.paciente_apellidos }}</h2>
+              <p>Teléfono: {{ cita.paciente_telefono || 'No registrado' }}</p>
+              <p>Fecha: {{ cita.fecha_cita }} Hora: {{ cita.hora_cita }}</p>
+              <p>Motivo: {{ cita.motivo }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
 
-    <ion-list lines="full" *ngIf="citasAgendadas.length > 0">
-      <ion-item *ngFor="let cita of citasAgendadas">
-        <ion-label>
-          <h2>{{ cita.paciente_nombres }} {{ cita.paciente_apellidos }}</h2>
-          <p>Teléfono: {{ cita.paciente_telefono || 'No registrado' }}</p>
-          <p>Fecha: {{ cita.fecha_cita }} Hora: {{ cita.hora_cita }}</p>
-          <p>Motivo: {{ cita.motivo }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-
-    <ion-text color="medium" class="ion-text-center ion-padding-top" *ngIf="citasAgendadas.length === 0">
-      <p>No tiene citas agendadas confirmadas.</p>
-    </ion-text>
+        <div class="ion-text-center ion-padding" *ngIf="citasAgendadas.length === 0">
+          <p style="color: #ffffff;">No tiene citas agendadas confirmadas.</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
 
   </div>
 </ion-content>

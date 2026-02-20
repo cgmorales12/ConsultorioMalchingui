@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="secondary">
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
@@ -35,7 +35,7 @@
         </ion-item>
 
         <ion-item>
-          <ion-label position="floating">Fecha de Nacimiento (*)</ion-label>
+          <ion-label position="stacked">Fecha de Nacimiento (*)</ion-label>
 
           <ion-input type="date" [(ngModel)]="paciente.fecha_nacimiento" name="fecha_nacimiento" required
             max="{{ getMaxDate() }}">
@@ -58,7 +58,7 @@
           <ion-input type="text" [(ngModel)]="paciente.direccion" name="direccion" required></ion-input>
         </ion-item>
 
-        <ion-button expand="block" color="success" type="submit" class="ion-margin-top"
+        <ion-button expand="block" color="secondary" type="submit" class="ion-margin-top"
           [disabled]="!registerForm.valid || isLoading">
           <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
           {{ isLoading ? 'Registrando...' : 'Registrar y Agendar Cita' }}

@@ -1,8 +1,8 @@
 <ion-header>
-  <ion-toolbar color="dark">
+  <ion-toolbar color="primary">
     <ion-title>Panel de Sistema</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logout()" style="font-weight: bold; --color: #b2ff59;">
+      <ion-button (click)="logout()" color="light">
         <ion-icon name="log-out-outline" slot="start"></ion-icon>
         Salir
       </ion-button>
@@ -19,7 +19,7 @@
 
   <div *ngIf="!isLoading">
 
-    <ion-card color="tertiary">
+    <ion-card color="primary">
       <ion-card-header>
         <ion-card-title>Ventana de Informativo</ion-card-title>
       </ion-card-header>
@@ -48,24 +48,24 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-card color="success">
+    <ion-card color="primary">
       <ion-card-header>
         <ion-card-title>Calidad de Servicio</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-button expand="block" color="light" (click)="cargarRanking()">
+        <ion-button expand="block" color="secondary" (click)="cargarRanking()">
           <ion-icon name="trophy-outline" slot="start"></ion-icon>
           Ver Ranking de Médicos
         </ion-button>
       </ion-card-content>
     </ion-card>
 
-    <ion-card color="secondary">
+    <ion-card color="primary">
       <ion-card-header>
         <ion-card-title>Gestión Inteligencia Artificial</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-button expand="block" color="light" (click)="goToReportesBot()">
+        <ion-button expand="block" color="secondary" (click)="goToReportesBot()">
           <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>
           Ver Reportes y Entrenar Bot
         </ion-button>
@@ -107,52 +107,71 @@
 
     <h3 class="ion-margin-top">Gestión Administrativa</h3>
 
-    <ion-card>
+    <ion-card class="admin-card" color="primary">
       <ion-card-header>
         <ion-card-title>Gestión Médicos</ion-card-title>
       </ion-card-header>
-      <ion-card-content>
-        <ion-button expand="block" color="primary" (click)="goToGestionMedicos('crear')">Crear Médico</ion-button>
-        <ion-button expand="block" color="secondary" (click)="goToGestionMedicos('modificar')">Modificar
-          Médico</ion-button>
-        <ion-button expand="block" color="danger" (click)="goToGestionMedicos('eliminar')">Eliminar Médico</ion-button>
+      <ion-card-content class="ion-padding-top">
+        <ion-button expand="block" color="secondary" (click)="goToGestionMedicos('crear')">
+          <ion-icon name="add-outline" slot="start"></ion-icon> Crear Médico
+        </ion-button>
+        <ion-button expand="block" color="secondary" (click)="goToGestionMedicos('modificar')">
+          <ion-icon name="create-outline" slot="start"></ion-icon> Modificar
+        </ion-button>
+        <ion-button expand="block" color="secondary" (click)="goToGestionMedicos('eliminar')">
+          <ion-icon name="trash-outline" slot="start"></ion-icon> Eliminar
+        </ion-button>
       </ion-card-content>
     </ion-card>
 
-    <ion-card>
+    <ion-card class="admin-card" color="primary">
       <ion-card-header>
         <ion-card-title>Gestión Citas</ion-card-title>
       </ion-card-header>
-      <ion-card-content>
-        <ion-button expand="block" color="primary" (click)="goToGestionCitas('crear')">Crear Cita</ion-button>
-        <ion-button expand="block" color="secondary" (click)="goToGestionCitas('modificar')">Modificar Cita</ion-button>
-        <ion-button expand="block" color="danger" (click)="goToGestionCitas('eliminar')">Eliminar Cita</ion-button>
+      <ion-card-content class="ion-padding-top">
+        <ion-button expand="block" color="secondary" (click)="goToGestionCitas('crear')">
+          <ion-icon name="add-outline" slot="start"></ion-icon> Crear Cita
+        </ion-button>
+        <ion-button expand="block" color="secondary" (click)="goToGestionCitas('modificar')">
+          <ion-icon name="create-outline" slot="start"></ion-icon> Modificar
+        </ion-button>
+        <ion-button expand="block" color="secondary" (click)="goToGestionCitas('eliminar')">
+          <ion-icon name="trash-outline" slot="start"></ion-icon> Eliminar
+        </ion-button>
       </ion-card-content>
     </ion-card>
 
-    <ion-card>
+    <ion-card class="admin-card" color="primary">
       <ion-card-header>
         <ion-card-title>Gestión Disponibilidad</ion-card-title>
       </ion-card-header>
-      <ion-card-content>
-        <ion-button expand="block" color="primary" (click)="goToGestionDisponibilidad('crear')">Crear
-          Disponibilidad</ion-button>
-        <ion-button expand="block" color="secondary" (click)="goToGestionDisponibilidad('modificar')">Modificar
-          Disponibilidad</ion-button>
-        <ion-button expand="block" color="danger" (click)="goToGestionDisponibilidad('eliminar')">Eliminar
-          Disponibilidad</ion-button>
+      <ion-card-content class="ion-padding-top">
+        <ion-button expand="block" color="secondary" (click)="goToGestionDisponibilidad('crear')">
+          <ion-icon name="add-outline" slot="start"></ion-icon> Crear
+        </ion-button>
+        <ion-button expand="block" color="secondary" (click)="goToGestionDisponibilidad('modificar')">
+          <ion-icon name="create-outline" slot="start"></ion-icon> Modificar
+        </ion-button>
+        <ion-button expand="block" color="secondary" (click)="goToGestionDisponibilidad('eliminar')">
+          <ion-icon name="trash-outline" slot="start"></ion-icon> Eliminar
+        </ion-button>
       </ion-card-content>
     </ion-card>
 
-    <ion-card>
+    <ion-card class="admin-card" color="primary">
       <ion-card-header>
         <ion-card-title>Gestión Login (Usuarios)</ion-card-title>
       </ion-card-header>
-      <ion-card-content>
-        <ion-button expand="block" color="primary" (click)="goToGestionLogin('crear')">Crear Usuario</ion-button>
-        <ion-button expand="block" color="secondary" (click)="goToGestionLogin('modificar')">Modificar
-          Usuario</ion-button>
-        <ion-button expand="block" color="danger" (click)="goToGestionLogin('eliminar')">Eliminar Usuario</ion-button>
+      <ion-card-content class="ion-padding-top">
+        <ion-button expand="block" color="secondary" (click)="goToGestionLogin('crear')">
+          <ion-icon name="add-outline" slot="start"></ion-icon> Crear Usuario
+        </ion-button>
+        <ion-button expand="block" color="secondary" (click)="goToGestionLogin('modificar')">
+          <ion-icon name="create-outline" slot="start"></ion-icon> Modificar
+        </ion-button>
+        <ion-button expand="block" color="secondary" (click)="goToGestionLogin('eliminar')">
+          <ion-icon name="trash-outline" slot="start"></ion-icon> Eliminar
+        </ion-button>
       </ion-card-content>
     </ion-card>
 

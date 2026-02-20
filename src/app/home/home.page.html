@@ -1,13 +1,16 @@
-<ion-header translucent="true">
-  <ion-toolbar color="primary">
-    <ion-title class="ion-text-center title-wrap">
-      <div class="subheadline">CONSULTORIO MÉDICO LUZ Y VIDA</div>
-      <div class="location-tag">Malchinguí, Ecuador</div>
-      <div class="headline">Registro de Citas</div>
-      <span class="subtitle prototype">PROTOTIPO</span>
-    </ion-title>
+<ion-header translucent="true" class="ion-no-border">
+  <ion-toolbar class="main-toolbar">
+    <div class="header-content">
+      <div class="title-container">
+        <div class="subheadline">CONSULTORIO MÉDICO</div>
+        <div class="main-title">LUZ Y VIDA</div>
+        <div class="location-tag">Malchinguí, Ecuador</div>
+      </div>
+      <div class="status-badge prototype">PROTOTIPO</div>
+    </div>
+
     <ion-buttons slot="end">
-      <ion-button color="light" fill="outline" size="small" class="login-btn" (click)="goToLogin()">
+      <ion-button color="secondary" fill="solid" size="small" class="login-btn" (click)="goToLogin()">
         <ion-icon name="log-in-outline" slot="start"></ion-icon>
         Ingreso Personal
       </ion-button>
@@ -28,7 +31,7 @@
       <div class="cta-column">
         <div class="cta-block">
           <p class="cta-label">¿ES TU PRIMERA VEZ?</p>
-          <ion-button expand="block" color="light" fill="solid" (click)="goToRegistro()">
+          <ion-button expand="block" color="secondary" fill="solid" (click)="goToRegistro()">
             <ion-icon name="person-add-outline" slot="start"></ion-icon>
             REGISTRO PACIENTE NUEVO
           </ion-button>
@@ -36,7 +39,7 @@
 
         <div class="cta-block">
           <p class="cta-label">¿YA TIENES UNA CUENTA?</p>
-          <ion-button expand="block" color="tertiary" fill="outline" (click)="goToLoginPaciente()">
+          <ion-button expand="block" color="secondary" fill="solid" (click)="goToLoginPaciente()">
             <ion-icon name="log-in-outline" slot="start"></ion-icon>
             PACIENTE REGISTRADO
           </ion-button>
@@ -99,7 +102,7 @@
                 <ion-icon slot="start" name="calendar-outline" color="warning" size="large"></ion-icon>
                 <ion-label>
                   <h3>Horarios Ocupados</h3>
-                  <p>Citas agendadas en sistema</p>
+                  <p><b>Citas agendadas en sistema</b></p>
                 </ion-label>
                 <ion-badge color="warning" slot="end">{{ statsCitas.ocupados }}</ion-badge>
               </ion-item>
@@ -108,8 +111,8 @@
               <ion-item>
                 <ion-icon slot="start" name="checkmark-circle-outline" color="success" size="large"></ion-icon>
                 <ion-label>
-                  <h3>Horarios Disponibles</h3>
-                  <p>Espacios libres para agendar</p>
+                  <h3><b>Horarios Disponibles</b></h3>
+                  <p><b>Espacios libres para agendar</b></p>
                 </ion-label>
                 <ion-badge color="success" slot="end">{{ statsCitas.disponibles }}</ion-badge>
               </ion-item>
@@ -118,8 +121,8 @@
               <ion-item>
                 <ion-icon slot="start" name="refresh-circle-outline" color="secondary" size="large"></ion-icon>
                 <ion-label>
-                  <h3>Horarios Liberados</h3>
-                  <p>Turnos reagendables</p>
+                  <h3><b>Horarios Liberados</b></h3>
+                  <p><b>Turnos reagendables</b></p>
                 </ion-label>
                 <ion-badge color="secondary" slot="end">{{ statsCitas.liberados }}</ion-badge>
               </ion-item>
@@ -140,7 +143,8 @@
         <ion-icon name="location-outline"></ion-icon>
         <div>
           <strong>Dirección</strong>
-          <p>Calle Quito Sur casa Don Mateo Navarrete alado lubricadora Tigreton</p>
+          <p style="color: #2dd36f; font-weight: bold;">Calle Quito Sur casa Don Mateo Navarrete alado lubricadora
+            Tigreton</p>
         </div>
       </div>
 
@@ -149,8 +153,8 @@
         <div>
           <strong>Teléfonos</strong>
           <p>
-            <a href="tel:022158033">02 215 8033</a><br>
-            <a href="tel:+593986266458">098 626 6458</a>
+            <a href="tel:022158033" style="color: #2dd36f; font-weight: bold;">02 215 8033</a><br>
+            <a href="tel:+593986266458" style="color: #2dd36f; font-weight: bold;">098 626 6458</a>
           </p>
         </div>
       </div>
@@ -159,7 +163,8 @@
         <ion-icon name="logo-whatsapp" style="color: #25D366; background: #dcfce7;"></ion-icon>
         <div>
           <strong>WhatsApp</strong>
-          <p><a href="https://wa.me/593986266458" target="_blank">Chat directo</a></p>
+          <p><a href="https://wa.me/593986266458" target="_blank" style="color: #2dd36f; font-weight: bold;">Chat
+              directo</a></p>
         </div>
       </div>
 
@@ -167,7 +172,8 @@
         <ion-icon name="mail-outline"></ion-icon>
         <div>
           <strong>Email</strong>
-          <p><a href="mailto:consultorioluzyvidaec@gmail.com">consultorioluzyvidaec@gmail.com</a></p>
+          <p><a href="mailto:consultorioluzyvidaec@gmail.com"
+              style="color: #2dd36f; font-weight: bold;">consultorioluzyvidaec@gmail.com</a></p>
         </div>
       </div>
 
@@ -175,13 +181,18 @@
         <ion-icon name="map-outline"></ion-icon>
         <div>
           <strong>Ubicación</strong>
-          <p><a href="https://maps.app.goo.gl/EbEc8goZPmsr9uEfA" target="_blank">Ver en Google Maps</a></p>
+          <p><a href="https://maps.app.goo.gl/EbEc8goZPmsr9uEfA" target="_blank"
+              style="color: #2dd36f; font-weight: bold;">Ver en Google Maps</a></p>
         </div>
       </div>
     </div>
 
+  </div>
+
+  <div class="footer-section">
     <div class="footer-credits">
-      <p>Página creada por: <strong>AMALIA IGUASNIA // LUIS RIBERA // CHRISTIAN MORALES</strong></p>
+      <p style="color: black; font-weight: bold;">Página creada por: <strong style="color: #2dd36f;">AMALIA IGUASNIA //
+          LUIS RIBERA // CHRISTIAN MORALES</strong></p>
     </div>
   </div>
 

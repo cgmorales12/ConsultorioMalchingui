@@ -2,17 +2,50 @@
   max-width: 400px;
   margin: 50px auto;
   padding: 20px;
-  background: white;
+  background: #227ea8;
+  /* Medium Blue match */
   border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  
+  box-shadow: 0 10px 30px rgba(34, 126, 168, 0.3);
+  color: #ffffff;
+  border-top: 4px solid #cfd8dc;
+
   ion-icon[size="large"] {
     font-size: 80px;
     margin-bottom: 10px;
+    color: #ffffff;
   }
 
   h2 {
     font-weight: bold;
-    color: var(--ion-color-dark);
+    color: #ffffff;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  ion-item {
+    --background: #ffffff;
+    --color: #000000;
+    --placeholder-color: #666666;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    font-weight: bold;
+    /* Bold text for input value */
+  }
+
+  ion-input {
+    font-weight: bold;
+    --placeholder-font-weight: bold;
+  }
+
+  ion-label {
+    color: #000000 !important;
+    /* Pure black */
+    font-weight: 800;
+    /* Extra bold for labels */
+    font-size: 1.1em;
+    /* Slightly larger */
   }
 }

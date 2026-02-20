@@ -35,3 +35,17 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+/* Global Button Styles */
+ion-button {
+  --border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: none; /* Modern look often drops all-caps */
+}
+
+/* Ensure secondary buttons (green) have white text if needed, though contrast logic handles it usually */
+.ion-color-secondary {
+  --ion-color-base: var(--ion-color-secondary);
+  --ion-color-contrast: #ffffff; 
+}
